@@ -1,0 +1,52 @@
+server:
+  port: 8084
+  servlet:
+    context-path: /api/v1/payment-service
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+#connect to database
+spring:
+  datasource:
+    #    url: jdbc:mysql://mysql-springboot-container:3306/e-commerce-microservice
+    url: jdbc:mysql://localhost:3306/payment-service
+    username: root
+    password: Dfer2205me
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  # kafka properties
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      #0: no wait for kafka response
+      #1: leader write success, not wait for follower
+      #-1: wait for all leader and replication
+      acks: -1
+      retries: 1
+
+      #prevent duplicate send
+#      properties:
+#        spring.json.type.mapping: event:com.sondev.event.UpdateOrderRequest
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+CLIENT_BASE_URL: http://localhost:3010
+
+stripe:
+  secret:
+    key: sk_test_51OgOCdLOmLphZ7kVM5nykoqiQWrHmGNr1l9sze8TKIEtNJnxogNdWR4gd3aIVPL4yLAODf0HKJK3SINaRC4t86C800K08LLmEO
+  webhook:
+    secret:
